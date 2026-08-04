@@ -53,7 +53,7 @@
         .status-banner.info { background: #eaf6ff; color: var(--delta-blue); }
         .status-banner.warn { background: #fff3e0; color: #b9660a; }
         .status-banner.success { background: #e6f9ee; color: #1a8a4c; }
-        .status-banner.empty { background: transparent; }
+        .status-banner.empty { background: transparent; min-height: 0; margin: 0; padding: 0; }
 
         input, select {
             padding: 12px 20px; font-size: 16px !important; width: 90%;
@@ -75,7 +75,7 @@
             background-size: cover;
             background-position: center;
             border-radius: 20px;
-            border: 3px solid #9fd7f5;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
             overflow: hidden;
             touch-action: none;
             cursor: grab;
