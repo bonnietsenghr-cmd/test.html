@@ -85,40 +85,72 @@
 <body>
 <div id="root"></div>
 
-<script>
-/* ---------------- storage helpers ---------------- */
+<script type="module">
+/* ---------------- Firebase / Firestore backend ---------------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, getDocs
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSNjnNimJrkLuyLQQUob278e66IO-y6pI",
+  authDomain: "dragonboat-e5a13.firebaseapp.com",
+  projectId: "dragonboat-e5a13",
+  storageBucket: "dragonboat-e5a13.firebasestorage.app",
+  messagingSenderId: "776111341709",
+  appId: "1:776111341709:web:0b1597d7553fc6339f22c4",
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// keeps the same sGet/sSet/sList interface the rest of the app already uses,
+// but backed by Firestore instead of window.storage.
+// 'employees:<id>' -> collection "employees", doc <id> (stored as-is)
+// anything else (e.g. 'inventory', 'race_status', 'leaderboard') -> collection "meta", doc <key>, wrapped as { value }
+function keyToRef(key){
+  if(key.startsWith('employees:')){
+    return doc(db, 'employees', key.slice('employees:'.length));
+  }
+  return doc(db, 'meta', key);
+}
+
 let STORAGE_OK = null; // null=unknown, true/false once tested
 async function checkStorage(){
-  if(!(window.storage && window.storage.get && window.storage.set)){ STORAGE_OK=false; return false; }
   try{
-    const probe = await window.storage.set('__probe__', JSON.stringify({t:Date.now()}), true);
-    STORAGE_OK = !!probe;
-  }catch(e){ STORAGE_OK=false; }
+    await setDoc(doc(db,'meta','__probe__'), { value:{ t: Date.now() } });
+    STORAGE_OK = true;
+  }catch(e){ console.error('Firestore probe failed', e); STORAGE_OK = false; }
   return STORAGE_OK;
 }
 async function sGet(key){
   try{
-    if(!(window.storage && window.storage.get)) throw new Error('no window.storage');
-    const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null;
-  }catch(e){ return null; }
+    const snap = await getDoc(keyToRef(key));
+    if(!snap.exists()) return null;
+    const d = snap.data();
+    return key.startsWith('employees:') ? d : d.value;
+  }catch(e){ console.error('storage get failed', key, e); return null; }
 }
 async function sSet(key, value){
   try{
-    if(!(window.storage && window.storage.set)) throw new Error('no window.storage');
-    const r = await window.storage.set(key, JSON.stringify(value), true); return !!r;
+    const ref = keyToRef(key);
+    await setDoc(ref, key.startsWith('employees:') ? value : { value });
+    return true;
   }catch(e){ console.error('storage set failed', key, e); return false; }
 }
 async function sList(prefix){
   try{
-    if(!(window.storage && window.storage.list)) throw new Error('no window.storage');
-    const r = await window.storage.list(prefix, true); return r ? r.keys : [];
-  }catch(e){ return []; }
+    if(prefix==='employees:'){
+      const snap = await getDocs(collection(db,'employees'));
+      return snap.docs.map(d=>'employees:'+d.id);
+    }
+    return [];
+  }catch(e){ console.error('storage list failed', prefix, e); return []; }
 }
 function storageBanner(){
   if(STORAGE_OK!==false) return '';
   return `<div class="card" style="background:#FBEAE8;border-color:#F1B6AE;">
     <strong style="color:var(--red);">⚠️ 目前無法連線到共用資料庫</strong>
-    <p class="muted" style="margin:6px 0 0;">請確認你是透過 Claude 提供的「分享連結／預覽」開啟本頁面，而不是下載檔案後直接用瀏覽器開啟。若已透過分享連結開啟仍看到此訊息，請重新整理頁面再試一次。</p>
+    <p class="muted" style="margin:6px 0 0;">請確認 Firebase 專案中已建立 Firestore Database（Console → Build → Firestore Database → Create database），並確認安全性規則允許讀寫。若已設定完成仍看到此訊息，請重新整理頁面再試一次。</p>
   </div>`;
 }
 
@@ -272,7 +304,7 @@ function renderFrontLogin(){
       const ok = await sSet(key, emp);
       if(!ok){
         btn.disabled=false; btn.textContent='進入活動頁面';
-        errEl.textContent = '⚠️ 無法儲存資料，請確認網路連線，或改用 Claude 分享連結開啟本頁面後再試一次。';
+        errEl.textContent = '⚠️ 無法儲存資料，請確認網路連線正常，並確認 Firebase 專案的 Firestore Database 已建立且安全性規則允許讀寫。';
         await checkStorage();
         renderFrontLogin();
         return;
@@ -733,4 +765,3 @@ render();
 </script>
 </body>
 </html>
-
