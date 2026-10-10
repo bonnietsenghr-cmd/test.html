@@ -1,767 +1,283 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>龍舟賽線上集章 ‧ 9/19</title>
+<title>韓語旅行單字挑戰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <style>
-  :root{
-    --navy:#0F3D5C; --navy-dark:#0A2C42; --teal:#0E7C7B; --red:#D9483A;
-    --gold:#E3B23C; --cream:#F7F8FA; --card:#FFFFFF; --text:#1A2530; --muted:#5B6670;
-    --line:#E3E7EB;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;font-family:-apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--cream);color:var(--text);}
-  .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:78px;}
-  header.topbar{background:linear-gradient(135deg,var(--navy-dark),var(--navy));color:#fff;padding:18px 20px 22px;position:relative;overflow:hidden;}
-  header.topbar::after{content:"";position:absolute;right:-30px;top:-40px;width:150px;height:150px;border-radius:50%;background:var(--teal);opacity:.35;}
-  header.topbar h1{margin:0;font-size:19px;font-weight:800;letter-spacing:.5px;position:relative;}
-  header.topbar p{margin:4px 0 0;font-size:12.5px;color:#BFD3E3;position:relative;}
-  .role-switch{position:absolute;top:16px;right:16px;font-size:11px;color:#BFD3E3;text-decoration:underline;cursor:pointer;z-index:2;}
-
-  .screen{padding:16px;}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(15,61,92,.06);}
-  .card h3{margin:0 0 8px;font-size:15px;color:var(--navy);}
-  .muted{color:var(--muted);font-size:12.5px;}
-  input[type=text],input[type=number],textarea,select{
-    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px;background:#fff;color:var(--text);
-  }
-  label{font-size:12.5px;color:var(--muted);display:block;margin:10px 0 4px;}
-  button{cursor:pointer;border:none;border-radius:10px;font-weight:700;font-size:14.5px;padding:12px 16px;}
-  .btn-primary{background:var(--red);color:#fff;width:100%;}
-  .btn-primary:disabled{background:#D8B3AE;cursor:not-allowed;}
-  .btn-outline{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
-  .btn-ghost{background:var(--cream);color:var(--navy);}
-  .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:10;}
-  .tabbar button{flex:1;background:none;border-radius:0;padding:10px 4px 8px;font-size:11px;color:var(--muted);font-weight:600;}
-  .tabbar button.active{color:var(--red);}
-  .tabbar .ic{font-size:19px;display:block;margin-bottom:2px;}
-
-  .stamp-row{display:flex;gap:10px;margin:14px 0;}
-  .stamp{flex:1;text-align:center;border-radius:12px;padding:14px 6px;border:2px dashed var(--line);}
-  .stamp.done{border-style:solid;border-color:var(--teal);background:#EAF6F5;}
-  .stamp .emoji{font-size:28px;display:block;margin-bottom:6px;}
-  .stamp .label{font-size:12px;font-weight:700;color:var(--navy);}
-  .stamp .state{font-size:10.5px;margin-top:3px;color:var(--muted);}
-  .stamp.done .state{color:var(--teal);}
-
-  .progress-track{height:8px;background:#E7ECF0;border-radius:6px;overflow:hidden;margin:8px 0 4px;}
-  .progress-fill{height:100%;background:var(--red);border-radius:6px;transition:width .4s;}
-
-  .coupon{background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:14px;padding:20px;text-align:center;position:relative;}
-  .coupon .code{font-size:30px;letter-spacing:6px;font-weight:800;margin:8px 0;font-family:"Courier New",monospace;}
-  .prize-card{background:linear-gradient(135deg,var(--red),#B8382C);color:#fff;border-radius:14px;padding:20px;text-align:center;}
-  .prize-card .name{font-size:22px;font-weight:800;margin-top:6px;}
-
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;}
-  th{color:var(--navy);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;}
-  .qty-low{color:var(--red);font-weight:700;}
-
-  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
-  .pill.ok{background:#DFF3EF;color:var(--teal);}
-  .pill.wait{background:#FBEAE8;color:var(--red);}
-
-  .segmented{display:flex;background:var(--cream);border-radius:10px;padding:3px;gap:3px;}
-  .segmented button{flex:1;background:transparent;color:var(--muted);padding:9px 4px;font-size:12.5px;border-radius:8px;}
-  .segmented button.active{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1);}
-
-  .gate{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;padding:20px;text-align:center;}
-  .gate .icon{font-size:40px;margin-bottom:10px;}
-
-  .empty{text-align:center;padding:30px 10px;color:var(--muted);font-size:13px;}
-
-  canvas{width:100%;background:linear-gradient(180deg,#BEE3F0,#8FC7DF);border-radius:12px;display:block;}
-  .row-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;}
-  .row-item:last-child{border-bottom:none;}
-  .badge-count{background:var(--gold);color:#fff;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700;}
-  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--navy-dark);color:#fff;padding:10px 18px;border-radius:30px;font-size:13px;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s, bottom .25s;}
-  .toast.show{opacity:1;bottom:100px;}
-  .flex-between{display:flex;justify-content:space-between;align-items:center;}
-  .small-input{width:70px;text-align:center;}
-  a.link{color:var(--teal);}
+/* Layout: one boarding-pass card per question; tabs choose the game, chips choose the vocab section */
+:root{
+  --bg:#eef1f5; --paper:#ffffff; --ink:#18233f; --muted:#5d6782; --line:#d6dbe6;
+  --accent:#1f7a6d; --accent-soft:#dcefeb; --bad:#c8402f; --bad-soft:#f8e1dc; --gold:#d79a21;
+  --f-display:"Black Han Sans","Noto Sans KR",sans-serif;
+  --f-body:"Noto Sans TC","Noto Sans KR",system-ui,sans-serif;
+  --f-ko:"Noto Sans KR","Apple SD Gothic Neo",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1424; --paper:#19213a; --ink:#e8ecf6; --muted:#9aa4c0; --line:#2c3656;
+  --accent:#4cbfac; --accent-soft:#183a3a; --bad:#f07a66; --bad-soft:#3d2224; --gold:#f0bb4f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1424; --paper:#19213a; --ink:#e8ecf6; --muted:#9aa4c0; --line:#2c3656;
+  --accent:#4cbfac; --accent-soft:#183a3a; --bad:#f07a66; --bad-soft:#3d2224; --gold:#f0bb4f; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:16px 40px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+header .eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+h1{font-family:var(--f-display);font-weight:400;font-size:30px;margin:2px 0 0;line-height:1.1;text-wrap:balance}
+.score{font-variant-numeric:tabular-nums;text-align:right;font-size:13px;color:var(--muted)}
+.score b{display:block;font-size:22px;color:var(--accent)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tabs button{border:0;background:none;color:var(--muted);font:500 14px var(--f-body);padding:9px 4px;border-radius:9px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips button{flex:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:13px var(--f-body);padding:5px 11px;border-radius:999px;cursor:pointer}
+.chips button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.chips[hidden]{display:none!important}
+.ticket{background:var(--paper);border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}
+.stub{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:2px dashed var(--line);font-size:12px;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.stub .gate{color:var(--accent);font-weight:700}
+.progress{height:3px;background:var(--line)}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.body{padding:20px 16px 18px;display:flex;flex-direction:column;gap:16px}
+.prompt-label{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.big{font-family:var(--f-ko);font-weight:700;font-size:34px;line-height:1.2;word-break:keep-all;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.big.zh{font-family:var(--f-body);font-size:28px}
+.sentence{font-family:var(--f-ko);font-size:21px;line-height:1.7;word-break:keep-all}
+.blank{display:inline-block;min-width:4.5em;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent);font-weight:700}
+.trans{color:var(--muted);font-size:14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:13px 10px;font:500 16px var(--f-ko);cursor:pointer;text-align:center;min-width:0;word-break:keep-all}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.opt.no{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.opt:disabled{cursor:default}
+.say{border:1px solid var(--line);background:var(--bg);color:var(--accent);border-radius:999px;width:34px;height:34px;font-size:15px;cursor:pointer;flex:none;display:inline-grid;place-items:center}
+.feedback{border-radius:10px;padding:10px 12px;font-size:14px}
+.feedback.ok{background:var(--accent-soft);color:var(--accent)}
+.feedback.no{background:var(--bad-soft);color:var(--bad)}
+.feedback .ko{font-family:var(--f-ko);font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;background:var(--ink);color:var(--paper);font:700 15px var(--f-body);padding:12px 18px;border-radius:10px;cursor:pointer;flex:1}
+.btn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+input.spell{width:100%;box-sizing:border-box;font:500 22px var(--f-ko);padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+input.spell:focus{outline:none;border-color:var(--accent)}
+.hint{font-size:13px;color:var(--muted)}
+.card{min-height:220px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;text-align:center;cursor:pointer;border:1.5px dashed var(--line);border-radius:12px;padding:20px;background:var(--bg)}
+.card .cat{font-size:12px;color:var(--gold);letter-spacing:.08em}
+.end{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.stamp{font-family:var(--f-display);font-size:56px;color:var(--accent);line-height:1}
+.miss{list-style:none;padding:0;margin:0;text-align:left;display:flex;flex-direction:column;gap:6px}
+.miss li{display:flex;justify-content:space-between;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px}
+.miss .ko{font-family:var(--f-ko);font-weight:700}
+.miss .zh{color:var(--muted);text-align:right}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+footer{font-size:12px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:380px){.big{font-size:28px}.opts{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
-<div id="root"></div>
 
-<script type="module">
-/* ---------------- Firebase / Firestore backend ---------------- */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import {
-  getFirestore, doc, getDoc, setDoc, collection, getDocs
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">고려 3 · 여행 단어</div>
+      <h1>旅行單字挑戰</h1>
+    </div>
+    <div class="score"><b id="scoreNum">0</b>本回答對</div>
+  </header>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCSNjnNimJrkLuyLQQUob278e66IO-y6pI",
-  authDomain: "dragonboat-e5a13.firebaseapp.com",
-  projectId: "dragonboat-e5a13",
-  storageBucket: "dragonboat-e5a13.firebasestorage.app",
-  messagingSenderId: "776111341709",
-  appId: "1:776111341709:web:0b1597d7553fc6339f22c4",
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-mode="mc" aria-selected="true" id="tab-mc">選擇題</button>
+    <button role="tab" data-mode="fill" aria-selected="false" id="tab-fill">例句填空</button>
+    <button role="tab" data-mode="spell" aria-selected="false" id="tab-spell">拼寫</button>
+    <button role="tab" data-mode="cards" aria-selected="false" id="tab-cards">單字卡</button>
+  </nav>
+
+  <div class="chips" id="chips"></div>
+
+  <section class="ticket">
+    <div class="stub"><span id="stubLeft">SEOUL → 단어</span><span class="gate" id="stubRight">1 / 10</span></div>
+    <div class="progress"><i id="bar" style="width:0%"></i></div>
+    <div class="body" id="stage"></div>
+  </section>
+
+  <footer>點 🔊 可以聽發音（依裝置的語音而定）</footer>
+</div>
+
+<script>
+const V = {
+ "地名":[["강릉","江陵"],["전주","全州"],["부산","釜山"],["춘천","春川"],["보령","保寧"],["제주도","濟州島"],["서울","首爾"],["경주","慶州"]],
+ "旅行種類":[["국내 여행","國內旅遊"],["해외여행","出國旅遊"],["자유 여행","自助旅遊"],["패키지여행","套裝旅遊、跟團旅遊"],["가족 여행","家庭旅遊"],["신혼여행","蜜月旅行"],["수학여행","校外教學"],["졸업 여행","畢業旅行"],["엠티(MT)","團隊訓練（旅遊）"]],
+ "旅行準備":[["일정","行程"],["세우다","建立・訂定（行程）"],["잡다","訂定"],["당일치기","一日遊"],["1박 2일","兩天一夜"],["숙소","住宿"],["교통편","交通方式"],["알아보다","打聽 / 查找"],["찾아보다","打聽 / 查找"],["정하다","決定"],["예약하다","預約"],["항공권","機票"],["기차표","火車票"],["입장권","入場券"],["예매하다","訂購（票）"],["끊다","買（票）"],["여권","護照"],["비자","簽證"],["신청하다","申請"],["발급 받다","收領（核發）"],["환전하다","換錢"],["여행자 보험을 들다","投保旅遊保險"]],
+ "旅行地特點":[["볼거리가 많다","可觀賞的東西很多"],["먹을거리가 많다","可吃的東西很多"],["즐길 거리가 많다","可玩的東西很多"],["축제가 있다","有慶典"],["맛집이 많다","美食店很多"],["전통문화를 체험할 수 있다","可以體驗傳統文化"]],
+ "聽力":[["연말","年底"],["데","地方"],["따라다니다","跟隨"],["계획을 짜다","制定計畫・排行程"]],
+ "其他":[["아직","還 / 還沒"],["호텔","飯店"],["게스트하우스","青年旅館 / 民宿"],["검색하다","搜尋"],["어떡하지?","怎麼辦？"],["깜박하다","忘記"],["생선회","生魚片"],["해물탕","海鮮鍋"],["자유 시간을 갖다","有自由時間"],["평소","平常"],["남는 시간","剩下的時間"],["둘러보다","逛、參觀"],["취소하다","取消"],["닭갈비","春川辣炒雞排"],["유명하다","有名 / 出名"],["성수기","旺季"],["비수기","淡季"],["예약이 다 차다","訂滿了"],["아무리","再怎麼"],["비밀번호","密碼"],["기억이 안 나다","想不起來"],["멀리","很遠・遠遠"],["살이 안 찌다","吃不胖"],["한옥 체험","韓屋體驗"]],
+ "文化":[["프리마켓","市集"],["파주","坡州"],["DMZ","非軍事區"],["판문점","板門店"],["임진각","臨津閣"],["디자인","設計"],["패션쇼","時裝秀"],["창덕궁","昌德宮"],["야간","夜間"],["달빛","月光"],["기행","紀行"],["함께","一起"],["두물머리","兩水頭"]]
 };
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-
-// keeps the same sGet/sSet/sList interface the rest of the app already uses,
-// but backed by Firestore instead of window.storage.
-// 'employees:<id>' -> collection "employees", doc <id> (stored as-is)
-// anything else (e.g. 'inventory', 'race_status', 'leaderboard') -> collection "meta", doc <key>, wrapped as { value }
-function keyToRef(key){
-  if(key.startsWith('employees:')){
-    return doc(db, 'employees', key.slice('employees:'.length));
-  }
-  return doc(db, 'meta', key);
-}
-
-let STORAGE_OK = null; // null=unknown, true/false once tested
-async function checkStorage(){
-  try{
-    await setDoc(doc(db,'meta','__probe__'), { value:{ t: Date.now() } });
-    STORAGE_OK = true;
-  }catch(e){ console.error('Firestore probe failed', e); STORAGE_OK = false; }
-  return STORAGE_OK;
-}
-async function sGet(key){
-  try{
-    const snap = await getDoc(keyToRef(key));
-    if(!snap.exists()) return null;
-    const d = snap.data();
-    return key.startsWith('employees:') ? d : d.value;
-  }catch(e){ console.error('storage get failed', key, e); return null; }
-}
-async function sSet(key, value){
-  try{
-    const ref = keyToRef(key);
-    await setDoc(ref, key.startsWith('employees:') ? value : { value });
-    return true;
-  }catch(e){ console.error('storage set failed', key, e); return false; }
-}
-async function sList(prefix){
-  try{
-    if(prefix==='employees:'){
-      const snap = await getDocs(collection(db,'employees'));
-      return snap.docs.map(d=>'employees:'+d.id);
-    }
-    return [];
-  }catch(e){ console.error('storage list failed', prefix, e); return []; }
-}
-function storageBanner(){
-  if(STORAGE_OK!==false) return '';
-  return `<div class="card" style="background:#FBEAE8;border-color:#F1B6AE;">
-    <strong style="color:var(--red);">⚠️ 目前無法連線到共用資料庫</strong>
-    <p class="muted" style="margin:6px 0 0;">請確認 Firebase 專案中已建立 Firestore Database（Console → Build → Firestore Database → Create database），並確認安全性規則允許讀寫。若已設定完成仍看到此訊息，請重新整理頁面再試一次。</p>
-  </div>`;
-}
-
-/* ---------------- constants ---------------- */
-const GAMES = [
-  { key:'basketball', label:'投籃挑戰', emoji:'🏀' },
-  { key:'pot',        label:'投壺挑戰', emoji:'🏺' },
-  { key:'pingpong',   label:'乒乓杯子', emoji:'🏓' },
+const S = [
+ ["이번 ___에 가족 여행을 가려고 해요.","這次年底打算去家庭旅遊。","연말",["비수기","성수기","야간"]],
+ ["여행 가기 전에 꼭 여권과 ___를 준비하세요.","出發前一定要準備護照和簽證。","비자",["입장권","비밀번호","달빛"]],
+ ["호텔 ___이 다 차서 게스트하우스를 예약했어요.","飯店訂滿了，所以訂了民宿。","예약",["일정","기억","환전"]],
+ ["춘천에 가면 ___를 꼭 먹어 보세요.","去春川一定要吃吃看辣炒雞排。","닭갈비",["비자","판문점","기차표"]],
+ ["부산은 바다가 가까워서 ___가 유명해요.","釜山離海很近，生魚片很有名。","생선회",["입장권","수학여행","달빛"]],
+ ["공항에 가기 전에 은행에서 돈을 ___.","去機場前在銀行換了錢。","환전했어요",["세웠어요","둘러봤어요","잡았어요"]],
+ ["서울에서 경주까지 ___로 다녀왔어요.","從首爾到慶州一日遊來回。","당일치기",["비밀번호","패션쇼","생선회"]],
+ ["이번 여행은 ___ 일정이에요. 하룻밤만 자요.","這次是兩天一夜的行程，只住一晚。","1박 2일",["당일치기","비수기","연말"]],
+ ["전주 한옥마을에서 전통문화를 ___할 수 있어요.","在全州韓屋村可以體驗傳統文化。","체험",["환전","발급","검색"]],
+ ["제주도는 볼거리도 많고 ___도 많아요.","濟州島可看的很多，可吃的也很多。","먹을거리",["비밀번호","여권","입장권"]],
+ ["가을은 여행 ___라서 사람이 많아요.","秋天是旅遊旺季，人很多。","성수기",["비수기","기행","디자인"]],
+ ["___에는 호텔 가격이 싸요.","淡季時飯店價格便宜。","비수기",["성수기","프리마켓","판문점"]],
+ ["인터넷으로 맛집을 ___했어요.","在網路上搜尋了美食店。","검색",["환전","발급","신청"]],
+ ["여권을 잃어버렸어요. ___?","護照弄丟了，怎麼辦？","어떡하지",["아무리","함께","멀리"]],
+ ["호텔 방 ___가 기억이 안 나요.","想不起來飯店房間的密碼。","비밀번호",["입장권","1박 2일","달빛"]],
+ ["가이드를 ___ 다니면서 구경했어요.","跟著導遊一邊走一邊參觀。","따라",["아직","아무리","비자"]],
+ ["친구와 ___ 여행 계획을 짰어요.","和朋友一起排了旅行計畫。","함께",["아직","아무리","야간"]],
+ ["밤에 남산에서 ___을 보며 산책했어요.","晚上在南山一邊看月光一邊散步。","달빛",["비자","생선회","기차표"]],
+ ["___ 시간에 시장을 둘러봤어요.","利用剩下的時間逛了市場。","남는",["유명한","멀리","아직"]],
+ ["학생 때 경주로 ___을 갔어요.","學生時代去慶州校外教學。","수학여행",["신혼여행","환전","비밀번호"]],
+ ["DMZ와 ___은 파주에 있어요.","非軍事區和臨津閣在坡州。","임진각",["창덕궁","두물머리","강릉"]],
+ ["아무리 먹어도 ___.","再怎麼吃都吃不胖。","살이 안 쪄요",["예약이 다 차요","기억이 안 나요","볼거리가 많아요"]],
+ ["숙소 예약을 ___해서 돈을 돌려받았어요.","取消了住宿預約，拿回了錢。","취소",["검색","환전","체험"]],
+ ["비행기 표는 인터넷으로 미리 ___했어요.","機票事先在網路上訂購了。","예매",["환전","체험","발급"]]
 ];
-const DEFAULT_INVENTORY = [
-  {id:'i1', name:'棒球日野球魂摺疊小扇子', qty:23},
-  {id:'i2', name:'台達藍色鴨舌帽', qty:42},
-  {id:'i3', name:'龍舟賽頭巾', qty:6},
-  {id:'i4', name:'2026移工禮品香包', qty:39},
-  {id:'i5', name:'原民小旅行-斜背包', qty:50},
-  {id:'i6', name:'2024樂活日野餐墊', qty:40},
-  {id:'i7', name:'齊柏林Delta水壺', qty:53},
-  {id:'i8', name:'禮券', qty:80},
-  {id:'i9', name:'小新皮革鑰匙圈', qty:178},
-  {id:'i10', name:'三麗鷗提袋', qty:202},
-];
-const STAFF_PIN = '9190'; // 工作人員後台密碼，可自行修改
 
-/* ---------------- global state ---------------- */
-let state = {
-  role: null,       // 'front' | 'back'
-  empId: null, empName: null,
-  frontTab: 'race',
-  backAuthed: false,
-  backTab: 'stamp',
-  stampGame: 'basketball',
-};
+const ALL = Object.entries(V).flatMap(([c,l])=>l.map(([ko,zh])=>({ko,zh,cat:c})));
+const $ = s=>document.querySelector(s);
+const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm = s=>s.replace(/[\s?？()（）.]/g,"").toLowerCase();
 
-function parseHash(){
-  const h = new URLSearchParams(location.hash.slice(1));
-  if(h.get('role')) state.role = h.get('role');
-  if(h.get('id')) state.empId = h.get('id');
-  if(h.get('name')) state.empName = decodeURIComponent(h.get('name'));
-  if(h.get('ft')) state.frontTab = h.get('ft');
+let mode="mc", cat="全部", queue=[], idx=0, score=0, wrong=[], locked=false;
+
+let koVoice=null;
+function loadVoices(){try{const vs=speechSynthesis.getVoices();koVoice=vs.find(v=>/^ko/i.test(v.lang))||null}catch(e){}}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+function toast(msg){let t=document.getElementById("toast");if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:528px;margin:0 auto;background:var(--ink);color:var(--paper);padding:12px 14px;border-radius:10px;font-size:14px;z-index:9";document.body.appendChild(t)}t.textContent=msg;t.hidden=false;clearTimeout(t._h);t._h=setTimeout(()=>t.hidden=true,4500)}
+function speak(t){
+  if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){toast("這個瀏覽器不支援語音播放，請改用 Safari 或 Chrome 開啟這個頁面。");return}
+  try{
+    loadVoices();
+    const u=new SpeechSynthesisUtterance(t.replace(/\(.*?\)/g,"").replace(/\?/g,""));
+    u.lang="ko-KR";u.rate=.85;u.volume=1;if(koVoice)u.voice=koVoice;
+    let started=false;u.onstart=()=>started=true;
+    u.onerror=e=>{if(e.error!=="interrupted"&&e.error!=="canceled")toast("語音播放失敗，請確認手機沒有開靜音，或改用 Safari / Chrome 開啟。")};
+    if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+    speechSynthesis.resume();
+    speechSynthesis.speak(u);
+    setTimeout(()=>{if(!started&&!speechSynthesis.speaking)toast(koVoice?"沒有播出聲音：請確認手機側邊的靜音開關已關閉、音量已調高。":"找不到韓語語音。iPhone 可到「設定 › 輔助使用 › 朗讀內容 › 聲音」下載韓文語音，或改用 Safari 開啟。")},1500);
+  }catch(e){toast("語音播放失敗，請改用 Safari 或 Chrome 開啟。")}
 }
-function writeHash(){
-  const p = new URLSearchParams();
-  if(state.role) p.set('role', state.role);
-  if(state.empId) p.set('id', state.empId);
-  if(state.empName) p.set('name', encodeURIComponent(state.empName));
-  if(state.frontTab) p.set('ft', state.frontTab);
-  history.replaceState(null,'','#'+p.toString());
-}
+const sayBtn = ko=>`<button class="say" aria-label="播放發音" onclick="event.stopPropagation();speak('${esc(ko).replace(/'/g,"\\'")}')">🔊</button>`;
 
-function toast(msg){
-  let t = document.getElementById('toast');
-  if(!t){ t=document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(()=>t.classList.remove('show'), 2000);
-}
+function pool(){return cat==="全部"?ALL:ALL.filter(w=>w.cat===cat)}
 
-function genCode(){
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let s=''; for(let i=0;i<6;i++) s+=chars[Math.floor(Math.random()*chars.length)];
-  return s;
+function renderChips(){
+  $("#chips").hidden = mode==="fill";
+  $("#chips").innerHTML=["全部",...Object.keys(V)].map(c=>`<button class="${c===cat?"on":""}" data-cat="${c}">${c}</button>`).join("");
 }
+$("#chips").onclick=e=>{const c=e.target.dataset.cat;if(!c)return;cat=c;renderChips();start()};
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  mode=b.dataset.mode;document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));renderChips();start()});
 
-/* ---------------- root render ---------------- */
-const root = document.getElementById('root');
-async function render(){
-  parseHash();
-  if(STORAGE_OK===null) await checkStorage();
-  if(!state.role){ renderRoleGate(); return; }
-  if(state.role==='front'){ renderFront(); return; }
-  if(state.role==='back'){ renderBack(); return; }
+function start(list){
+  idx=0;score=0;wrong=[];$("#scoreNum").textContent=0;
+  if(mode==="fill") queue = list || shuffle(S).slice(0,10);
+  else if(mode==="cards") queue = list || shuffle(pool());
+  else queue = list || shuffle(pool()).slice(0,10);
+  $("#stubLeft").textContent={mc:"選擇題 · 객관식",fill:"例句填空 · 빈칸",spell:"拼寫 · 쓰기",cards:"單字卡 · 카드"}[mode];
+  show();
+}
+function setProgress(){$("#stubRight").textContent=`${Math.min(idx+1,queue.length)} / ${queue.length}`;$("#bar").style.width=(idx/queue.length*100)+"%"}
+
+function show(){
+  locked=false;
+  if(idx>=queue.length && mode!=="cards") return finish();
+  setProgress();
+  ({mc:showMC,fill:showFill,spell:showSpell,cards:showCard})[mode]();
 }
 
-/* ================= ROLE GATE ================= */
-function renderRoleGate(){
-  root.innerHTML = `
-  <div class="gate">
-    ${STORAGE_OK===false ? `<div style="width:100%;max-width:340px;">${storageBanner()}</div>` : ''}
-    <div class="icon">🐉🚣</div>
-    <h2 style="color:var(--navy);margin:0 0 4px;">龍舟賽周邊集章遊戲</h2>
-    <p class="muted" style="margin:0 0 26px;">9/19 現場活動 ‧ 線上電子章</p>
-    <div style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;">
-      <button class="btn-primary" id="goFront">👤 我是同事，開始玩</button>
-      <button class="btn-outline" id="goBack">🛠 我是工作人員，進入後台</button>
+function distractors(w,key){
+  let p=ALL.filter(x=>x.cat===w.cat && x.zh!==w.zh && x.ko!==w.ko);
+  if(p.length<3) p=ALL.filter(x=>x.zh!==w.zh && x.ko!==w.ko);
+  return shuffle(p).slice(0,3).map(x=>x[key]);
+}
+function showMC(){
+  const w=queue[idx], toZh=Math.random()<.5;
+  const ans= toZh?w.zh:w.ko, opts=shuffle([ans,...distractors(w,toZh?"zh":"ko")]);
+  $("#stage").innerHTML=`
+    <div class="prompt-label">${toZh?"這個韓文是什麼意思？":"這個中文用韓文怎麼說？"}　<span style="color:var(--gold)">${w.cat}</span></div>
+    <div class="big ${toZh?"":"zh"}">${esc(toZh?w.ko:w.zh)} ${toZh?sayBtn(w.ko):""}</div>
+    <div class="opts">${opts.map(o=>`<button class="opt" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+    <div id="fb"></div>`;
+  $("#stage").querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(b,b.dataset.v===ans,w,ans));
+}
+function showFill(){
+  const [s,zh,ans,d]=queue[idx], opts=shuffle([ans,...d]);
+  $("#stage").innerHTML=`
+    <div class="prompt-label">選出最適合放進空格的單字</div>
+    <div class="sentence">${esc(s).replace("___",'<span class="blank" id="blank">?</span>')}</div>
+    <div class="trans">${esc(zh)}</div>
+    <div class="opts">${opts.map(o=>`<button class="opt" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+    <div id="fb"></div>`;
+  $("#stage").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    $("#blank").textContent=ans;
+    answer(b,b.dataset.v===ans,{ko:s.replace("___",ans),zh},ans,true)});
+}
+function showSpell(){
+  const w=queue[idx];
+  $("#stage").innerHTML=`
+    <div class="prompt-label">用韓文寫出來　<span style="color:var(--gold)">${w.cat}</span></div>
+    <div class="big zh">${esc(w.zh)}</div>
+    <form id="sf" class="row" style="flex-direction:column">
+      <input class="spell" id="spellInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="한국어로 입력…">
+      <div class="hint">提示：第一個字是「${esc([...w.ko][0])}」，共 ${w.ko.replace(/\s/g,"").length} 個字（不算空格）</div>
+      <div class="row"><button class="btn" type="submit">確認</button><button class="btn ghost" type="button" id="giveUp">看答案</button></div>
+    </form>
+    <div id="fb"></div>`;
+  const inp=$("#spellInput"); setTimeout(()=>inp.focus(),50);
+  $("#sf").onsubmit=e=>{e.preventDefault();if(locked||!inp.value.trim())return;answer(null,norm(inp.value)===norm(w.ko),w,w.ko)};
+  $("#giveUp").onclick=()=>{if(!locked)answer(null,false,w,w.ko)};
+}
+function answer(btn,ok,w,ans,isSentence){
+  if(locked)return;locked=true;
+  if(ok){score++;$("#scoreNum").textContent=score}else wrong.push(mode==="fill"?{ko:ans,zh:w.zh}:w);
+  $("#stage").querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.v===ans)b.classList.add("ok")});
+  if(btn&&!ok)btn.classList.add("no");
+  const inp=$("#spellInput");if(inp)inp.disabled=true;
+  $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}">${ok?"答對了！":"答案是"} <span class="ko">${esc(isSentence?w.ko:(mode==="mc"?w.ko+" ＝ "+w.zh:w.ko))}</span> ${sayBtn(isSentence?w.ko:w.ko)}</div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="next">${idx+1<queue.length?"下一題 →":"看結果"}</button></div>`;
+  $("#next").onclick=()=>{idx++;show()};
+  $("#next").focus();
+  if(ok)speak(isSentence?w.ko:w.ko);
+}
+function showCard(){
+  const w=queue[idx]; let flipped=false;
+  $("#stage").innerHTML=`
+    <div class="card" id="card" role="button" tabindex="0" aria-label="翻面">
+      <div class="cat">${w.cat}</div>
+      <div class="big" id="face" style="justify-content:center">${esc(w.ko)} ${sayBtn(w.ko)}</div>
+      <div class="hint" id="cardHint">點一下看中文</div>
     </div>
-  </div>`;
-  document.getElementById('goFront').onclick=()=>{ state.role='front'; writeHash(); render(); };
-  document.getElementById('goBack').onclick=()=>{ state.role='back'; writeHash(); render(); };
+    <div class="row"><button class="btn ghost" id="prev">← 上一張</button><button class="btn" id="nextC">下一張 →</button></div>`;
+  const flip=()=>{flipped=!flipped;$("#face").className="big"+(flipped?" zh":"");
+    $("#face").innerHTML=flipped?esc(w.zh):esc(w.ko)+" "+sayBtn(w.ko);$("#cardHint").textContent=flipped?"再點一下回到韓文":"點一下看中文"};
+  $("#card").onclick=flip;$("#card").onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip()}};
+  $("#prev").onclick=()=>{idx=(idx-1+queue.length)%queue.length;show()};
+  $("#nextC").onclick=()=>{idx=(idx+1)%queue.length;show()};
 }
-
-/* ================= FRONT (employee) ================= */
-async function renderFront(){
-  if(!state.empId){ renderFrontLogin(); return; }
-  root.innerHTML = `
-  <div class="app">
-    <header class="topbar">
-      <span class="role-switch" id="switchRole">切換身分</span>
-      <h1>🐉 龍舟賽周邊活動</h1>
-      <p>${state.empName} ‧ 工號 ${state.empId}</p>
-    </header>
-    <div class="screen" id="frontScreen"></div>
-    <div class="tabbar">
-      <button data-t="race"><span class="ic">📡</span>賽況</button>
-      <button data-t="stamp"><span class="ic">🎯</span>集章</button>
-      <button data-t="prize"><span class="ic">🎁</span>兌獎</button>
-      <button data-t="game"><span class="ic">🚣</span>小遊戲</button>
-    </div>
-  </div>`;
-  document.getElementById('switchRole').onclick=()=>{ state.role=null; state.empId=null; state.empName=null; location.hash=''; render(); };
-  [...document.querySelectorAll('.tabbar button')].forEach(b=>{
-    b.classList.toggle('active', b.dataset.t===state.frontTab);
-    b.onclick=()=>{ state.frontTab=b.dataset.t; writeHash(); render(); };
-  });
-  const el = document.getElementById('frontScreen');
-  if(state.frontTab==='race') await renderFrontRace(el);
-  else if(state.frontTab==='stamp') await renderFrontStamp(el);
-  else if(state.frontTab==='prize') await renderFrontPrize(el);
-  else if(state.frontTab==='game') await renderFrontGame(el);
+function finish(){
+  $("#bar").style.width="100%";$("#stubRight").textContent="完成";
+  const pct=score/queue.length, msg=pct===1?"全對！準備出發 ✈︎":pct>=.7?"很不錯，再複習幾個就好":"多練幾次就會記住";
+  $("#stage").innerHTML=`<div class="end">
+    <div class="stamp">${score}<span style="font-size:24px;color:var(--muted)"> / ${queue.length}</span></div>
+    <div>${msg}</div>
+    ${wrong.length?`<div class="prompt-label" style="text-align:left">要再複習的單字</div>
+      <ul class="miss">${wrong.map(w=>`<li><span class="ko">${esc(w.ko)}</span><span class="zh">${esc(w.zh)}</span></li>`).join("")}</ul>`:""}
+    <div class="row">
+      ${wrong.length&&mode!=="fill"?`<button class="btn" id="retryWrong">只練錯的</button>`:""}
+      <button class="btn ${wrong.length&&mode!=="fill"?"ghost":""}" id="again">再玩一次</button>
+    </div></div>`;
+  $("#again").onclick=()=>start();
+  const rw=$("#retryWrong");if(rw)rw.onclick=()=>start(shuffle(wrong));
 }
-
-function renderFrontLogin(){
-  root.innerHTML = `
-  <div class="gate">
-    <div style="width:100%;max-width:320px;">${storageBanner()}</div>
-    <div class="icon">🎟️</div>
-    <h2 style="color:var(--navy);margin:0 0 4px;">輸入你的資料</h2>
-    <p class="muted" style="margin:0 0 24px;">用來記錄集章進度，離開頁面後憑工號可繼續</p>
-    <div style="width:100%;max-width:320px;">
-      <label>姓名</label>
-      <input type="text" id="inName" placeholder="王小明">
-      <label>工號 / 暱稱（作為識別碼）</label>
-      <input type="text" id="inId" placeholder="A12345">
-      <button class="btn-primary" style="margin-top:18px;" id="enterBtn">進入活動頁面</button>
-      <p class="muted" id="loginError" style="margin-top:10px;color:var(--red);"></p>
-      <p class="muted" style="margin-top:4px;cursor:pointer;text-decoration:underline;" id="backHome">← 返回</p>
-    </div>
-  </div>`;
-  document.getElementById('enterBtn').onclick=async ()=>{
-    const name = document.getElementById('inName').value.trim();
-    const id = document.getElementById('inId').value.trim();
-    const errEl = document.getElementById('loginError');
-    errEl.textContent='';
-    if(!name || !id){ toast('請填寫姓名與工號'); return; }
-    const btn = document.getElementById('enterBtn');
-    btn.disabled = true; btn.textContent = '處理中...';
-    const key = 'employees:'+id;
-    let emp = await sGet(key);
-    if(!emp){
-      emp = { id, name, stamps:{basketball:false,pot:false,pingpong:false}, coupon:null, redeemed:false, prize:null };
-      const ok = await sSet(key, emp);
-      if(!ok){
-        btn.disabled=false; btn.textContent='進入活動頁面';
-        errEl.textContent = '⚠️ 無法儲存資料，請確認網路連線正常，並確認 Firebase 專案的 Firestore Database 已建立且安全性規則允許讀寫。';
-        await checkStorage();
-        renderFrontLogin();
-        return;
-      }
-      // verify write actually persisted
-      const verify = await sGet(key);
-      if(!verify){
-        btn.disabled=false; btn.textContent='進入活動頁面';
-        errEl.textContent = '⚠️ 資料寫入後讀取失敗，請重新整理頁面再試一次。';
-        return;
-      }
-      emp = verify;
-    }
-    state.empId = id; state.empName = emp.name;
-    writeHash(); render();
-  };
-  document.getElementById('backHome').onclick=()=>{ state.role=null; render(); };
-}
-
-async function renderFrontRace(el){
-  el.innerHTML = `<div class="card"><p class="muted">載入賽況中...</p></div>`;
-  const rs = await sGet('race_status') || { title:'龍舟賽即時戰況', text:'工作人員尚未更新今日賽況，請稍後再查看，或現場關注司儀廣播。', youtube:'' };
-  el.innerHTML = `
-    <div class="card">
-      <h3>📡 ${rs.title}</h3>
-      <p style="font-size:13.5px;line-height:1.6;">${rs.text.replace(/\n/g,'<br>')}</p>
-      ${rs.youtube ? `<div style="margin-top:10px;border-radius:10px;overflow:hidden;aspect-ratio:16/9;"><iframe width="100%" height="100%" src="${rs.youtube}" frameborder="0" allowfullscreen></iframe></div>` : ''}
-      <p class="muted" style="margin-top:10px;">最後更新：${rs.updatedAt ? new Date(rs.updatedAt).toLocaleString('zh-TW') : '尚未更新'}</p>
-    </div>
-    <div class="card">
-      <h3>⏱ 今日流程</h3>
-      <p class="muted" style="line-height:1.8;">09:30–16:30　周邊遊戲區開放<br>11:00–13:00　午餐時段（關主輪替）<br>集滿 3 枚電子章即可兌換禮品券</p>
-    </div>`;
-}
-
-async function renderFrontStamp(el){
-  el.innerHTML = `<div class="card"><p class="muted">載入中...</p></div>`;
-  const emp = await sGet('employees:'+state.empId);
-  if(!emp){
-    el.innerHTML = `${storageBanner()}
-      <div class="card" style="text-align:center;">
-        <p class="muted">找不到你的資料，可能是雲端連線暫時中斷。</p>
-        <button class="btn-outline" id="retryStamp" style="margin-top:8px;">🔄 重新整理</button>
-        <button class="btn-ghost" id="relogin" style="margin-top:8px;">重新輸入姓名工號</button>
-      </div>`;
-    document.getElementById('retryStamp').onclick=()=>renderFrontStamp(el);
-    document.getElementById('relogin').onclick=()=>{ state.empId=null; state.empName=null; writeHash(); render(); };
-    return;
-  }
-  const doneCount = GAMES.filter(g=>emp.stamps[g.key]).length;
-  el.innerHTML = `
-    ${storageBanner()}
-    <div class="card">
-      <h3>🎯 集章進度</h3>
-      <div class="progress-track"><div class="progress-fill" style="width:${doneCount/3*100}%;"></div></div>
-      <p class="muted">${doneCount} / 3 完成</p>
-      <div class="stamp-row">
-        ${GAMES.map(g=>`
-          <div class="stamp ${emp.stamps[g.key]?'done':''}">
-            <span class="emoji">${g.emoji}</span>
-            <div class="label">${g.label}</div>
-            <div class="state">${emp.stamps[g.key] ? '已蓋章 ✓' : '請至關卡蓋章'}</div>
-          </div>`).join('')}
-      </div>
-      <p class="muted" style="margin-top:6px;">請至對應遊戲關卡完成挑戰，由工作人員協助蓋上電子章。</p>
-    </div>
-    ${doneCount===3 ? renderCouponBlock(emp) : ''}
-  `;
-  if(doneCount===3 && !emp.coupon){
-    const code = genCode();
-    emp.coupon = code;
-    await sSet('employees:'+state.empId, emp);
-    render();
-  }
-}
-
-function renderCouponBlock(emp){
-  if(emp.redeemed){
-    return `<div class="prize-card"><div class="muted" style="color:#FBD9D4;">已兌換禮品</div><div class="name">${emp.prize||''}</div></div>`;
-  }
-  return `<div class="coupon">
-    <div class="muted" style="color:#BFD3E3;">恭喜集滿三章！兌換序號</div>
-    <div class="code">${emp.coupon||''}</div>
-    <div class="muted" style="color:#BFD3E3;">請至禮品區出示此序號，由工作人員協助抽獎</div>
-  </div>`;
-}
-
-async function renderFrontPrize(el){
-  el.innerHTML = `<div class="card"><p class="muted">載入中...</p></div>`;
-  const emp = await sGet('employees:'+state.empId);
-  if(!emp){
-    el.innerHTML = `${storageBanner()}<div class="card" style="text-align:center;"><p class="muted">找不到你的資料，請重新整理頁面。</p><button class="btn-outline" id="retryPrize">🔄 重新整理</button></div>`;
-    document.getElementById('retryPrize').onclick=()=>renderFrontPrize(el);
-    return;
-  }
-  const doneCount = GAMES.filter(g=>emp.stamps[g.key]).length;
-  if(emp.redeemed){
-    el.innerHTML = `<div class="prize-card">
-      <div class="muted" style="color:#FBD9D4;">🎉 你已兌換禮品</div>
-      <div class="name">${emp.prize}</div>
-    </div>
-    <div class="card"><p class="muted">感謝參與，手部應蓋有西瓜章，仍可自由體驗各項遊戲喔！</p></div>`;
-  } else if(doneCount===3){
-    el.innerHTML = `${renderCouponBlock(emp)}
-    <div class="card"><h3>如何兌換？</h3><p class="muted" style="line-height:1.8;">1. 前往禮品區<br>2. 出示上方序號給工作人員<br>3. 工作人員協助抽籤並登記領取<br>4. 手部蓋西瓜章，完成兌換</p></div>`;
-  } else {
-    el.innerHTML = `<div class="card" style="text-align:center;">
-      <div style="font-size:34px;">🔒</div>
-      <h3>尚未集滿三章</h3>
-      <p class="muted">目前進度 ${doneCount} / 3，完成所有關卡後即可產生兌換序號。</p>
-    </div>`;
-  }
-}
-
-/* ---- mini game: 划龍舟拚手速 ---- */
-let gameTimer=null, gameActive=false, tapCount=0, gameEndAt=0;
-async function renderFrontGame(el){
-  const board = (await sGet('leaderboard')) || [];
-  el.innerHTML = `
-    <div class="card">
-      <h3>🚣 划龍舟拚手速</h3>
-      <p class="muted">10 秒內盡量點擊「划槳」，看看能不能划贏對手船！沒有比賽也能消耗時間 😄</p>
-      <canvas id="raceCanvas" height="140"></canvas>
-      <div class="flex-between" style="margin-top:10px;">
-        <span class="muted" id="timeLabel">尚未開始</span>
-        <span class="muted" id="tapLabel">划槳次數：0</span>
-      </div>
-      <button class="btn-primary" id="tapBtn" style="margin-top:12px;">🛶 開始比賽</button>
-    </div>
-    <div class="card">
-      <h3>🏆 排行榜 Top 10</h3>
-      ${board.length ? board.slice(0,10).map((r,i)=>`
-        <div class="row-item"><span>${i+1}. ${r.name}</span><span class="badge-count">${r.taps} 槳</span></div>
-      `).join('') : `<div class="empty">還沒有人挑戰，當第一名吧！</div>`}
-    </div>`;
-
-  const canvas = document.getElementById('raceCanvas');
-  const ctx = canvas.getContext('2d');
-  function resize(){ canvas.width = canvas.clientWidth; drawFrame(0,0); }
-  window.addEventListener('resize', resize);
-  const FINISH = ()=>canvas.width-40;
-  const BOT_SPEED = ()=> (canvas.width-70)/10000; // px per ms
-
-  function drawFrame(playerX, botX){
-    const w=canvas.width, h=canvas.height;
-    ctx.clearRect(0,0,w,h);
-    // lanes
-    ctx.strokeStyle='rgba(255,255,255,.6)'; ctx.setLineDash([6,6]);
-    ctx.beginPath(); ctx.moveTo(0,h*0.38); ctx.lineTo(w,h*0.38); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0,h*0.78); ctx.lineTo(w,h*0.78); ctx.stroke();
-    ctx.setLineDash([]);
-    // finish line
-    ctx.fillStyle='#fff'; ctx.fillRect(w-36,10,4,h-20);
-    ctx.font='20px sans-serif'; ctx.fillText('🏁', w-34, 30);
-    // boats
-    ctx.font='30px sans-serif';
-    ctx.fillText('🚣', Math.min(playerX,w-40), h*0.38+8);
-    ctx.font='26px sans-serif';
-    ctx.fillText('🐉', Math.min(botX,w-40), h*0.78+6);
-    ctx.font='11px sans-serif'; ctx.fillStyle='rgba(15,61,92,.7)';
-    ctx.fillText('你', 6, h*0.38-6);
-    ctx.fillText('對手', 6, h*0.78-6);
-  }
-  resize();
-
-  let startTime=0, rafId=null;
-  function loop(){
-    const now = performance.now();
-    const elapsed = now - startTime;
-    const botX = 20 + BOT_SPEED()*Math.min(elapsed,10000);
-    const playerX = 20 + tapCount*7;
-    drawFrame(playerX, botX);
-    const remain = Math.max(0, 10 - elapsed/1000);
-    document.getElementById('timeLabel').textContent = gameActive ? `剩餘 ${remain.toFixed(1)} 秒` : '比賽結束';
-    document.getElementById('tapLabel').textContent = `划槳次數：${tapCount}`;
-    if(elapsed < 10000 && gameActive){ rafId = requestAnimationFrame(loop); }
-    else if(gameActive){ endGame(playerX, botX); }
-  }
-  async function endGame(playerX, botX){
-    gameActive=false;
-    const btn=document.getElementById('tapBtn');
-    btn.textContent='🔄 再玩一次';
-    const win = playerX >= botX;
-    toast(win ? `🎉 你贏了對手船！划槳 ${tapCount} 次` : `💦 差一點！划槳 ${tapCount} 次`);
-    let board = (await sGet('leaderboard')) || [];
-    board.push({ name: state.empName, taps: tapCount, at: Date.now() });
-    board = board.sort((a,b)=>b.taps-a.taps).slice(0,10);
-    await sSet('leaderboard', board);
-    renderFrontGame(el);
-  }
-  document.getElementById('tapBtn').onclick=()=>{
-    if(!gameActive){
-      gameActive=true; tapCount=0; startTime=performance.now();
-      document.getElementById('tapBtn').textContent='🛶 用力點擊划槳！';
-      loop();
-    } else {
-      tapCount++;
-    }
-  };
-}
-
-/* ================= BACK (staff) ================= */
-function renderBack(){
-  if(!state.backAuthed){ renderBackGate(); return; }
-  root.innerHTML = `
-  <div class="app">
-    <header class="topbar">
-      <span class="role-switch" id="switchRole">離開後台</span>
-      <h1>🛠 工作人員後台</h1>
-      <p>龍舟賽周邊活動管理</p>
-    </header>
-    <div class="screen" id="backScreen"></div>
-    <div class="tabbar">
-      <button data-t="stamp"><span class="ic">🎯</span>蓋章站</button>
-      <button data-t="redeem"><span class="ic">🎁</span>兌獎站</button>
-      <button data-t="inv"><span class="ic">📦</span>庫存</button>
-      <button data-t="race"><span class="ic">📡</span>賽況</button>
-      <button data-t="dash"><span class="ic">📊</span>儀表板</button>
-    </div>
-  </div>`;
-  document.getElementById('switchRole').onclick=()=>{ state.role=null; state.backAuthed=false; location.hash=''; render(); };
-  [...document.querySelectorAll('.tabbar button')].forEach(b=>{
-    b.classList.toggle('active', b.dataset.t===state.backTab);
-    b.onclick=()=>{ state.backTab=b.dataset.t; render(); };
-  });
-  const el = document.getElementById('backScreen');
-  if(state.backTab==='stamp') renderBackStamp(el);
-  else if(state.backTab==='redeem') renderBackRedeem(el);
-  else if(state.backTab==='inv') renderBackInventory(el);
-  else if(state.backTab==='race') renderBackRace(el);
-  else if(state.backTab==='dash') renderBackDash(el);
-}
-
-function renderBackGate(){
-  root.innerHTML = `
-  <div class="gate">
-    <div class="icon">🔐</div>
-    <h2 style="color:var(--navy);margin:0 0 4px;">工作人員登入</h2>
-    <p class="muted" style="margin:0 0 24px;">請輸入現場公告的通行密碼</p>
-    <div style="width:100%;max-width:280px;">
-      <input type="text" id="pinInput" placeholder="密碼" inputmode="numeric">
-      <button class="btn-primary" style="margin-top:14px;" id="pinBtn">登入後台</button>
-      <p class="muted" style="margin-top:14px;cursor:pointer;text-decoration:underline;" id="backHome">← 返回</p>
-    </div>
-  </div>`;
-  document.getElementById('pinBtn').onclick=()=>{
-    if(document.getElementById('pinInput').value.trim()===STAFF_PIN){ state.backAuthed=true; render(); }
-    else toast('密碼錯誤');
-  };
-  document.getElementById('backHome').onclick=()=>{ state.role=null; render(); };
-}
-
-function renderBackStamp(el){
-  el.innerHTML = `
-    ${storageBanner()}
-    <div class="card">
-      <h3>🎯 蓋章站</h3>
-      <label>選擇關卡</label>
-      <div class="segmented" id="gameSeg">
-        ${GAMES.map(g=>`<button data-g="${g.key}" class="${g.key===state.stampGame?'active':''}">${g.emoji} ${g.label}</button>`).join('')}
-      </div>
-      <label>員工工號</label>
-      <input type="text" id="stampId" placeholder="輸入工號後按 Enter 或搜尋">
-      <button class="btn-outline" style="margin-top:10px;width:100%;" id="searchBtn">搜尋員工</button>
-      <div id="stampResult" style="margin-top:14px;"></div>
-    </div>`;
-  [...document.querySelectorAll('#gameSeg button')].forEach(b=>{
-    b.onclick=()=>{ state.stampGame=b.dataset.g; renderBackStamp(el); };
-  });
-  const doSearch = async ()=>{
-    const id = document.getElementById('stampId').value.trim();
-    if(!id) return;
-    const emp = await sGet('employees:'+id);
-    const box = document.getElementById('stampResult');
-    if(!emp){ box.innerHTML = `<p class="muted">查無此工號，請確認同事已在前台輸入資料建立紀錄。</p>`; return; }
-    const g = GAMES.find(x=>x.key===state.stampGame);
-    const already = emp.stamps[g.key];
-    box.innerHTML = `
-      <div class="card" style="background:var(--cream);">
-        <div class="flex-between"><strong>${emp.name}</strong><span class="muted">工號 ${emp.id}</span></div>
-        <p class="muted">${g.emoji} ${g.label}：${already ? '<span class="pill ok">已蓋章</span>' : '<span class="pill wait">尚未蓋章</span>'}</p>
-        <button class="btn-primary" id="stampConfirm" ${already?'disabled':''}>${already?'已完成蓋章':'✅ 確認蓋章'}</button>
-      </div>`;
-    const btn = document.getElementById('stampConfirm');
-    if(btn && !already){
-      btn.onclick=async ()=>{
-        emp.stamps[g.key]=true;
-        await sSet('employees:'+emp.id, emp);
-        toast(`已為 ${emp.name} 蓋上 ${g.label} 章`);
-        doSearch();
-      };
-    }
-  };
-  document.getElementById('searchBtn').onclick=doSearch;
-  document.getElementById('stampId').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
-}
-
-function renderBackRedeem(el){
-  el.innerHTML = `
-    ${storageBanner()}
-    <div class="card">
-      <h3>🎁 兌獎站</h3>
-      <label>輸入員工工號</label>
-      <input type="text" id="redeemId" placeholder="工號">
-      <button class="btn-outline" style="margin-top:10px;width:100%;" id="redeemSearch">查詢</button>
-      <div id="redeemResult" style="margin-top:14px;"></div>
-    </div>`;
-  const search = async ()=>{
-    const id = document.getElementById('redeemId').value.trim();
-    if(!id) return;
-    const emp = await sGet('employees:'+id);
-    const box = document.getElementById('redeemResult');
-    if(!emp){ box.innerHTML=`<p class="muted">查無此工號</p>`; return; }
-    const doneCount = GAMES.filter(g=>emp.stamps[g.key]).length;
-    if(emp.redeemed){
-      box.innerHTML = `<div class="prize-card"><div class="muted" style="color:#FBD9D4;">已於 ${new Date(emp.redeemedAt).toLocaleString('zh-TW')} 領取</div><div class="name">${emp.prize}</div></div>`;
-      return;
-    }
-    if(doneCount<3){
-      box.innerHTML = `<p class="muted">${emp.name} 目前完成 ${doneCount}/3 關卡，尚未取得抽獎資格。</p>`;
-      return;
-    }
-    box.innerHTML = `
-      <div class="card" style="background:var(--cream);">
-        <div class="flex-between"><strong>${emp.name}</strong><span class="pill ok">3/3 已集章</span></div>
-        <p class="muted">兌換序號：<strong>${emp.coupon}</strong></p>
-        <button class="btn-primary" id="drawBtn">🎲 現場抽獎並登記領取</button>
-      </div>`;
-    document.getElementById('drawBtn').onclick=async ()=>{
-      const inv = (await sGet('inventory')) || DEFAULT_INVENTORY;
-      const pool = inv.filter(i=>i.qty>0);
-      if(!pool.length){ toast('禮品已全部送完'); return; }
-      let r = Math.random()*pool.reduce((s,i)=>s+i.qty,0);
-      let picked = pool[pool.length-1];
-      for(const item of pool){ if(r<item.qty){ picked=item; break; } r-=item.qty; }
-      picked.qty -= 1;
-      await sSet('inventory', inv);
-      emp.redeemed=true; emp.prize=picked.name; emp.redeemedAt=Date.now();
-      await sSet('employees:'+emp.id, emp);
-      toast(`🎉 ${emp.name} 抽中「${picked.name}」`);
-      search();
-    };
-  };
-  document.getElementById('redeemSearch').onclick=search;
-  document.getElementById('redeemId').addEventListener('keydown',e=>{ if(e.key==='Enter') search(); });
-}
-
-async function renderBackInventory(el){
-  el.innerHTML = `<div class="card"><p class="muted">載入中...</p></div>`;
-  let inv = await sGet('inventory');
-  if(!inv){ inv = DEFAULT_INVENTORY.slice(); await sSet('inventory', inv); }
-  el.innerHTML = `
-    <div class="card">
-      <h3>📦 禮品庫存管理</h3>
-      <table>
-        <thead><tr><th>品項</th><th>剩餘</th><th></th></tr></thead>
-        <tbody>
-        ${inv.map((item,idx)=>`
-          <tr>
-            <td>${item.name}</td>
-            <td><input class="small-input" type="number" min="0" data-idx="${idx}" value="${item.qty}"></td>
-            <td><button class="btn-ghost saveRow" data-idx="${idx}" style="padding:6px 10px;font-size:12px;">儲存</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-      <p class="muted" style="margin-top:8px;">總計剩餘：${inv.reduce((s,i)=>s+i.qty,0)} 件</p>
-    </div>
-    <div class="card">
-      <h3>➕ 新增品項</h3>
-      <label>品項名稱</label>
-      <input type="text" id="newName" placeholder="例如：加碼小禮">
-      <label>數量</label>
-      <input type="number" id="newQty" min="0" value="0">
-      <button class="btn-primary" style="margin-top:10px;" id="addItem">新增</button>
-    </div>`;
-  [...document.querySelectorAll('.saveRow')].forEach(btn=>{
-    btn.onclick=async ()=>{
-      const idx = +btn.dataset.idx;
-      const input = document.querySelector(`input[data-idx="${idx}"]`);
-      inv[idx].qty = Math.max(0, parseInt(input.value)||0);
-      await sSet('inventory', inv);
-      toast('已儲存');
-      renderBackInventory(el);
-    };
-  });
-  document.getElementById('addItem').onclick=async ()=>{
-    const name = document.getElementById('newName').value.trim();
-    const qty = Math.max(0, parseInt(document.getElementById('newQty').value)||0);
-    if(!name){ toast('請輸入品項名稱'); return; }
-    inv.push({ id:'i'+Date.now(), name, qty });
-    await sSet('inventory', inv);
-    renderBackInventory(el);
-  };
-}
-
-async function renderBackRace(el){
-  const rs = (await sGet('race_status')) || { title:'龍舟賽即時戰況', text:'', youtube:'' };
-  el.innerHTML = `
-    <div class="card">
-      <h3>📡 更新賽況資訊</h3>
-      <label>標題</label>
-      <input type="text" id="rsTitle" value="${rs.title||''}">
-      <label>文字說明（同事會在前台看到）</label>
-      <textarea id="rsText" rows="4">${rs.text||''}</textarea>
-      <label>YouTube 直播嵌入網址（選填，需為 embed 網址）</label>
-      <input type="text" id="rsYt" placeholder="https://www.youtube.com/embed/xxxxx" value="${rs.youtube||''}">
-      <button class="btn-primary" style="margin-top:12px;" id="rsSave">儲存更新</button>
-    </div>`;
-  document.getElementById('rsSave').onclick=async ()=>{
-    const data = {
-      title: document.getElementById('rsTitle').value.trim() || '龍舟賽即時戰況',
-      text: document.getElementById('rsText').value.trim(),
-      youtube: document.getElementById('rsYt').value.trim(),
-      updatedAt: Date.now(),
-    };
-    await sSet('race_status', data);
-    toast('賽況已更新，同事前台會同步顯示');
-  };
-}
-
-async function renderBackDash(el){
-  el.innerHTML = `<div class="card"><p class="muted">統計中，請稍候...</p></div>`;
-  const keys = await sList('employees:');
-  let total=0, done3=0, redeemed=0;
-  const perGame = { basketball:0, pot:0, pingpong:0 };
-  for(const k of keys){
-    const emp = await sGet(k);
-    if(!emp) continue;
-    total++;
-    GAMES.forEach(g=>{ if(emp.stamps[g.key]) perGame[g.key]++; });
-    if(GAMES.every(g=>emp.stamps[g.key])) done3++;
-    if(emp.redeemed) redeemed++;
-  }
-  const inv = (await sGet('inventory')) || DEFAULT_INVENTORY;
-  const invLeft = inv.reduce((s,i)=>s+i.qty,0);
-  const invTotal = DEFAULT_INVENTORY.reduce((s,i)=>s+i.qty,0);
-  el.innerHTML = `
-    <div class="card">
-      <h3>📊 活動儀表板</h3>
-      <div class="row-item"><span>參與人數（已建立紀錄）</span><span class="badge-count">${total}</span></div>
-      <div class="row-item"><span>集滿三章人數</span><span class="badge-count">${done3}</span></div>
-      <div class="row-item"><span>已完成兌獎</span><span class="badge-count">${redeemed}</span></div>
-    </div>
-    <div class="card">
-      <h3>各關卡蓋章數</h3>
-      ${GAMES.map(g=>`<div class="row-item"><span>${g.emoji} ${g.label}</span><span class="badge-count">${perGame[g.key]}</span></div>`).join('')}
-    </div>
-    <div class="card">
-      <h3>禮品庫存</h3>
-      <div class="progress-track"><div class="progress-fill" style="width:${invTotal? (invLeft/invTotal*100):0}%;background:var(--teal);"></div></div>
-      <p class="muted">剩餘 ${invLeft} / 原始 ${invTotal} 件</p>
-    </div>
-    <button class="btn-outline" style="width:100%;" id="refreshDash">🔄 重新整理統計</button>`;
-  document.getElementById('refreshDash').onclick=()=>renderBackDash(el);
-}
-
-render();
+document.addEventListener("keydown",e=>{
+  if(mode==="mc"||mode==="fill"){const n=+e.key;if(n>=1&&n<=4&&!locked){const b=$("#stage").querySelectorAll(".opt")[n-1];b&&b.click()}}
+});
+renderChips();start();
 </script>
-</body>
-</html>
