@@ -48,7 +48,10 @@ h1{font-family:var(--f-display);font-weight:400;font-size:30px;margin:2px 0 0;li
 .opt.ok{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
 .opt.no{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
 .opt:disabled{cursor:default}
-.say{border:1px solid var(--line);background:var(--bg);color:var(--accent);border-radius:999px;width:34px;height:34px;font-size:15px;cursor:pointer;flex:none;display:inline-grid;place-items:center}
+.say{border:1px solid var(--line);background:var(--bg);color:var(--accent);border-radius:999px;width:44px;height:44px;font-size:20px;cursor:pointer;flex:none;display:inline-grid;place-items:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.say:active{transform:scale(.92);background:var(--accent-soft)}
+.diag{white-space:pre-line;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}
+.testbtn{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 13px var(--f-body);padding:8px 12px;border-radius:999px;cursor:pointer}
 .feedback{border-radius:10px;padding:10px 12px;font-size:14px}
 .feedback.ok{background:var(--accent-soft);color:var(--accent)}
 .feedback.no{background:var(--bad-soft);color:var(--bad)}
@@ -88,6 +91,9 @@ footer{font-size:12px;color:var(--muted);text-align:center}
     <button role="tab" data-mode="spell" aria-selected="false" id="tab-spell">拼寫</button>
     <button role="tab" data-mode="cards" aria-selected="false" id="tab-cards">單字卡</button>
   </nav>
+
+  <div class="row" style="align-items:center"><button type="button" class="testbtn" id="testBtn" onclick="testSound()">🔊 測試聲音</button></div>
+  <div class="diag" id="diag" hidden></div>
 
   <div class="chips" id="chips"></div>
 
@@ -163,7 +169,26 @@ function speak(t){
     setTimeout(()=>{if(!started&&!speechSynthesis.speaking)toast(koVoice?"沒有播出聲音：請確認手機側邊的靜音開關已關閉、音量已調高。":"找不到韓語語音。iPhone 可到「設定 › 輔助使用 › 朗讀內容 › 聲音」下載韓文語音，或改用 Safari 開啟。")},1500);
   }catch(e){toast("語音播放失敗，請改用 Safari 或 Chrome 開啟。")}
 }
-const sayBtn = ko=>`<button class="say" aria-label="播放發音" onclick="event.stopPropagation();speak('${esc(ko).replace(/'/g,"\\'")}')">🔊</button>`;
+const sayBtn = ko=>`<button type="button" class="say" aria-label="播放發音" data-say="${esc(ko)}">🔊</button>`;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(!b)return;e.stopPropagation();e.preventDefault();speak(b.dataset.say,b)},true);
+function testSound(){
+  const out=document.getElementById("diag");
+  let info=[];
+  if(!("speechSynthesis" in window)){out.textContent="❌ 這個瀏覽器不支援語音。";out.hidden=false;return}
+  let vs=[];try{vs=speechSynthesis.getVoices()}catch(e){}
+  const ko=vs.filter(v=>/^ko/i.test(v.lang));
+  info.push(`裝置語音共 ${vs.length} 個，韓文語音 ${ko.length} 個${ko.length?"（"+ko.map(v=>v.name).join("、")+"）":""}`);
+  out.textContent=info.join("\n")+"\n正在播放「안녕하세요」…";out.hidden=false;
+  try{
+    const u=new SpeechSynthesisUtterance("안녕하세요");u.lang="ko-KR";if(ko[0])u.voice=ko[0];
+    let st=false;
+    u.onstart=()=>{st=true;out.textContent=info.join("\n")+"\n✅ 系統說正在播放。如果還是聽不到，是靜音開關或音量的問題。"};
+    u.onerror=e=>{out.textContent=info.join("\n")+"\n❌ 播放錯誤："+e.error};
+    if(speechSynthesis.speaking)speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+    setTimeout(()=>{if(!st)out.textContent=info.join("\n")+"\n❌ 系統沒有開始播放。"+(ko.length?"":"請到「設定 › 輔助使用 › 朗讀內容 › 聲音 › 韓文」下載語音後重新整理。")},2000);
+  }catch(e){out.textContent="❌ "+e.message}
+}
 
 function pool(){return cat==="全部"?ALL:ALL.filter(w=>w.cat===cat)}
 
